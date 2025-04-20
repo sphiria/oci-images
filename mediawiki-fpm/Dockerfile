@@ -87,6 +87,10 @@ RUN apk add --no-cache --virtual .build-deps-wikidiff2 \
     && rm -rf wikidiff2 \
     && apk del .build-deps-wikidiff2
 
+# Generate PHP extension config files
+RUN echo 'extension = luasandbox.so' > /etc/php83/conf.d/luasandbox.ini && \
+    echo 'extension = wikidiff2.so' > /etc/php83/conf.d/wikidiff2.ini
+
 # Ensure the target directory is writable by nobody before switching user
 RUN chown -R nobody:nobody /var/www/html
 
@@ -146,10 +150,10 @@ WORKDIR /var/www/html
 COPY --from=builder /var/www/html /var/www/html
 COPY --from=builder /usr/lib/php83/modules/wikidiff2.so /usr/lib/php83/modules/wikidiff2.so
 
+COPY --from=builder /etc/php83/conf.d/luasandbox.ini /etc/php83/conf.d/luasandbox.ini
+COPY --from=builder /etc/php83/conf.d/wikidiff2.ini /etc/php83/conf.d/wikidiff2.ini
 
 USER nobody
-RUN echo 'extension = luasandbox.so' >> /etc/php83/conf.d/luasandbox.ini
-RUN echo 'extension = wikidiff2.so' >> /etc/php83/conf.d/wikidiff2.ini
 
 EXPOSE 9000
 
