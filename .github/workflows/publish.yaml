@@ -1,14 +1,23 @@
 name: docker multi-arch build
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: 'Which image to build and push?'
+        required: true
+        type: choice
+        options:
+          - mediawiki-fpm
+      tag:
+        description: 'The semantic version tag to apply (e.g., v1.0.0)'
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build for amd64/arm64
+    name: build ${{ inputs.image_name }} for amd64/arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,11 +38,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Build and push Mediawiki
+        if: inputs.image_name == 'mediawiki-fpm'
         uses: docker/build-push-action@v5
         with:
-          context: ./mediawiki
+          context: ./mediawiki-fpm
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ghcr.io/${{ github.repository }}/mediawiki:latest
-            ghcr.io/${{ github.repository }}/mediawiki:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}/mediawiki:${{ inputs.tag }}

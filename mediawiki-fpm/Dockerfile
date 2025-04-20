@@ -53,12 +53,6 @@ RUN apk add --no-cache \
 COPY config/php/fpm-pool.conf /etc/php83/php-fpm.d/www.conf
 COPY config/php/php.ini /etc/php83/conf.d/00-custom.ini
 COPY config/php/opcache.ini /etc/php83/conf.d/opcache.ini
-# COPY config/php/luasandbox.ini /etc/php83/conf.d/luasandbox.ini
-# COPY config/php/wikidiff2.ini /etc/php83/conf.d/wikidiff2.ini
-
-# copy resources
-COPY resource/robots.txt /var/www/html/robots.txt
-COPY resource/favicon.ico /var/www/html/favicon.ico
 
 # create necessary runtime directories and set initial ownership
 RUN mkdir -p /run /var/log /.composer && \
