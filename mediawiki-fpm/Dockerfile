@@ -139,7 +139,8 @@ RUN cd /var/www/html/extensions \
     && mv Deletepagesforgood DeletePagesForGood \
     && mv Darkmode DarkMode \
     && mv Cldr cldr \
-    && mv Shortdescription ShortDescription
+    && mv Shortdescription ShortDescription \
+    && mv Sphiriatools SphiriaTools
 
 FROM base
 
