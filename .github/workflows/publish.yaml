@@ -43,7 +43,7 @@ jobs:
         run: |
           delimiter="$(openssl rand -hex 8)"
           {
-            echo 'tags<<$delimiter'
+            echo "tags<<$delimiter"
             echo "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}:latest"
             echo "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}:${{ inputs.tag }}"
             echo "$delimiter"
