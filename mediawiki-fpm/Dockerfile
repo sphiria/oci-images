@@ -15,6 +15,7 @@ RUN apk add --no-cache \
   imagemagick \
   lua5.1 \
   libthai-dev \
+  git \
   php83 \
   php83-calendar \
   php83-ctype \
@@ -76,6 +77,7 @@ RUN apk add --no-cache \
 # install wikidiff2
 RUN apk add --no-cache --virtual .build-deps-wikidiff2 \
         build-base \
+        git \
     && git clone https://gerrit.wikimedia.org/r/mediawiki/php/wikidiff2 \
     && cd wikidiff2 \
     && phpize \
