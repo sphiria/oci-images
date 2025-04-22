@@ -1,4 +1,4 @@
-FROM ghcr.io/sphiria/oci-images/mediawiki:v1.0.4
+FROM ghcr.io/sphiria/oci-images/mediawiki-fpm:v1.0.0
 
 USER root
 
