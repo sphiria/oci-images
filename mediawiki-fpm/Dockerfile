@@ -109,7 +109,7 @@ RUN curl -fSL "https://releases.wikimedia.org/mediawiki/${MEDIAWIKI_MAJOR_VERSIO
 
 # install composer dependencies
 COPY composer.json /var/www/html/composer.local.json
-RUN --mount=type=cache,target=/.composer/cache \
+RUN --mount=type=cache,target=/.composer/cache,uid=65534 \
     /usr/bin/php83 /usr/bin/composer.phar config --no-plugins allow-plugins.composer/installers true && \
     /usr/bin/php83 /usr/bin/composer.phar install --no-dev \
         --ignore-platform-reqs \

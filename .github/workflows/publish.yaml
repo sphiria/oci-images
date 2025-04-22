@@ -1,4 +1,5 @@
 name: docker multi-arch build
+run-name: Build and push ${{ inputs.image_name || 'unknown image' }} for tag ${{ inputs.tag || 'unspecified tag' }}
 
 on:
   workflow_dispatch:
