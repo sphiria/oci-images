@@ -47,3 +47,5 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}/mediawiki:latest
             ghcr.io/${{ github.repository }}/mediawiki:${{ inputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

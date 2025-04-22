@@ -10,45 +10,46 @@ LABEL Description="Base image for Mediawiki 1.43.1 with PHP-FPM 8.3 (Alpine 3.21
 WORKDIR /var/www/html
 
 # install runtime packages
-RUN apk add --no-cache \
-  curl \
-  imagemagick \
-  lua5.1 \
-  libthai-dev \
-  git \
-  php83 \
-  php83-calendar \
-  php83-ctype \
-  php83-curl \
-  php83-exif \
-  php83-fileinfo \
-  php83-fpm \
-  php83-gd \
-  php83-iconv \
-  php83-intl \
-  php83-json \
-  php83-mbstring \
-  php83-mysqli \
-  php83-opcache \
-  php83-openssl \
-  php83-pcntl \
-  php83-pecl-luasandbox \
-  php83-pecl-redis \
-  php83-pear \
-  php83-phar \
-  php83-posix \
-  php83-session \
-  php83-simplexml \
-  php83-sodium \
-  php83-tokenizer \
-  php83-xml \
-  php83-xmlreader \
-  php83-xmlwriter \
-  php83-zlib \
-  python3 \
-  supervisor \
-  unzip \
-  vips-tools
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
+      curl \
+      imagemagick \
+      lua5.1 \
+      libthai-dev \
+      git \
+      php83 \
+      php83-calendar \
+      php83-ctype \
+      php83-curl \
+      php83-exif \
+      php83-fileinfo \
+      php83-fpm \
+      php83-gd \
+      php83-iconv \
+      php83-intl \
+      php83-json \
+      php83-mbstring \
+      php83-mysqli \
+      php83-opcache \
+      php83-openssl \
+      php83-pcntl \
+      php83-pecl-luasandbox \
+      php83-pecl-redis \
+      php83-pear \
+      php83-phar \
+      php83-posix \
+      php83-session \
+      php83-simplexml \
+      php83-sodium \
+      php83-tokenizer \
+      php83-xml \
+      php83-xmlreader \
+      php83-xmlwriter \
+      php83-zlib \
+      python3 \
+      supervisor \
+      unzip \
+      vips-tools
 
 # copy runtime configs
 COPY config/php/fpm-pool.conf /etc/php83/php-fpm.d/www.conf
@@ -66,16 +67,17 @@ FROM base AS builder
 LABEL Description="Builder stage for Mediawiki 1.43.1"
 
 # install build dependencies
-RUN apk add --no-cache \
-  composer \
-  diffutils \
-  git \
-  lua5.1-dev \
-  php83-dev \
-  build-base
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
+      composer \
+      diffutils \
+      lua5.1-dev \
+      php83-dev \
+      build-base
 
 # install wikidiff2
-RUN apk add --no-cache --virtual .build-deps-wikidiff2 \
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --virtual .build-deps-wikidiff2 \
         build-base \
         git \
     && git clone https://gerrit.wikimedia.org/r/mediawiki/php/wikidiff2 \
@@ -107,7 +109,8 @@ RUN curl -fSL "https://releases.wikimedia.org/mediawiki/${MEDIAWIKI_MAJOR_VERSIO
 
 # install composer dependencies
 COPY composer.json /var/www/html/composer.local.json
-RUN /usr/bin/php83 /usr/bin/composer.phar config --no-plugins allow-plugins.composer/installers true && \
+RUN --mount=type=cache,target=/.composer/cache \
+    /usr/bin/php83 /usr/bin/composer.phar config --no-plugins allow-plugins.composer/installers true && \
     /usr/bin/php83 /usr/bin/composer.phar install --no-dev \
         --ignore-platform-reqs \
         --no-ansi \
@@ -117,7 +120,6 @@ RUN /usr/bin/php83 /usr/bin/composer.phar config --no-plugins allow-plugins.comp
         --no-ansi \
         --no-interaction \
         --no-scripts && \
-    # clean up composer cache
     rm -rf /.composer/cache/*
 
 # fix folder names
