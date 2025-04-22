@@ -41,7 +41,13 @@ jobs:
       - name: Generate tags
         id: generate_tags
         run: |
-          echo "tags=ghcr.io/${{ github.repository }}/${{ inputs.image_name }}:latest\nghcr.io/${{ github.repository }}/${{ inputs.image_name }}:${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo 'tags<<$delimiter'
+            echo "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}:latest"
+            echo "ghcr.io/${{ github.repository }}/${{ inputs.image_name }}:${{ inputs.tag }}"
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
           
       - name: Build and push Mediawiki
         if: inputs.image_name == 'mediawiki-fpm'
