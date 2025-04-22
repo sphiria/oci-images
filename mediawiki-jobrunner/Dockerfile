@@ -2,7 +2,7 @@ FROM ghcr.io/sphiria/oci-images/mediawiki-fpm:v1.0.0
 
 USER root
 
-WORKDIR /var/www/
+WORKDIR /var/www/html
 
 RUN git clone https://github.com/miraheze/jobrunner-service.git mediawiki-services-jobrunner
 
